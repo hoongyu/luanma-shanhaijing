@@ -1,0 +1,15 @@
+id: wenhao
+name: 刘?
+tag: 编码写入
+glyphs: [刘, "?"]
+out: "刘 ?"
+why: >-
+  GBK 装不下扩展 A 区的字。䶮 U+4DAE 属 CJK 扩展 A（U+3400–U+4DBF），
+  GBK 只覆盖到 U+9FA5。实测 gb2312/gbk/big5 全部 UnicodeEncodeError，
+  只有 gb18030 能编。这不是显示问题，是数据已死——问号不可逆。
+notes:
+  - [現, 编码写入层：写库、写文件、写协议头]
+  - [異, errors='ignore' 更狠：生僻字被静默吞掉，只剩「刘」，比问号更难察觉]
+  - [驅, 全链路 UTF-8，或走 gb18030（GB 18030-2022 自 2023-08-01 起是强制性国标）]
+repro: wenhao
+expect: "刘?"

@@ -30,3 +30,35 @@ def tangtangtang():
 def tuntuntun():
     """同上，堆内存填 0xCD；CD CD 是「屯」。见烫知栈，见屯知堆。"""
     return (b"\xcd" * 6).decode("gbk")
+
+
+@repro("wenhao")
+def wenhao():
+    """GBK 装不下扩展 A 区的字，errors='replace' 拿 ASCII 问号顶上。姓名当场缺一个字。"""
+    name = "".join(chr(c) for c in (0x5218, 0x4DAE))
+    return name.encode("gbk", errors="replace").decode("gbk")
+
+
+@repro("qiwenhao")
+def qiwenhao():
+    """同一家四口走 GBK 管道：errors='replace' 逐码位替换，连三枚不可见的 ZWJ 也各换一个问号。"""
+    z = chr(0x200D)
+    fam = (chr(0x1F468) + z + chr(0x1F469) + z
+           + chr(0x1F467) + z + chr(0x1F466))
+    return fam.encode("gbk", errors="replace").decode("gbk")
+
+
+@repro("nfd_lv")
+def nfd_lv():
+    """拼音 lv4 的预组合形式 GBK 编得出来，分解形式的两枚组合符号 GBK 根本没有。"""
+    import unicodedata
+    nfc = "l" + chr(0x01DC)
+    nfd = unicodedata.normalize("NFD", nfc)
+    return nfd.encode("gbk", errors="replace").decode("gbk")
+
+
+@repro("shen")
+def shen():
+    """CJK 兼容汉字带单例规范分解，单例分解永不重组，所以连 NFC 都会把它换掉。"""
+    import unicodedata
+    return unicodedata.normalize("NFC", chr(0xFA19))
