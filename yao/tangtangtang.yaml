@@ -1,0 +1,17 @@
+id: tangtangtang
+name: 燙燙燙
+tag: 内存填充
+glyphs: [烫, 烫, 烫]
+hex_texture: CC CC
+bytes: [CC CC, CC CC, CC CC]
+out: 烫 烫 烫
+via: 按 GBK 双字节切开
+why: >-
+  这不是编码错，是你看见了内存本身的颜色。MSVC 调试版把未初始化的栈内存
+  全填成 0xCC（int3 断点指令），而 CC CC 在 GBK 里恰好是「烫」。
+notes:
+  - [現, MSVC 调试模式读到未初始化的栈]
+  - [異, 孪生兄弟叫「屯屯屯」——堆填 0xCD，CD CD 即「屯」]
+  - [驅, 初始化你的变量。修内存，不是修编码]
+repro: tangtangtang
+expect: 烫烫烫

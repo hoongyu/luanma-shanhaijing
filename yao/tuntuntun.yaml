@@ -1,0 +1,17 @@
+id: tuntuntun
+name: 屯屯屯
+tag: 内存填充
+glyphs: [屯, 屯, 屯]
+hex_texture: CD CD
+bytes: [CD CD, CD CD, CD CD]
+out: 屯 屯 屯
+via: 按 GBK 双字节切开
+why: >-
+  烫烫烫的孪生兄弟。MSVC 调试版把未初始化的堆内存填成 0xCD，
+  CD CD 在 GBK 里是「屯」。见烫知栈，见屯知堆。
+notes:
+  - [現, MSVC 调试模式读到未初始化的堆]
+  - [異, 栈那一只叫「烫烫烫」，填的是 0xCC]
+  - [驅, 初始化你的变量。修内存，不是修编码]
+repro: tuntuntun
+expect: 屯屯屯
