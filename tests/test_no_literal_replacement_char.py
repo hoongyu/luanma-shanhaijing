@@ -16,7 +16,18 @@ REPLACEMENT_CHAR = chr(0xFFFD)
 
 SCANNED = sorted(
     p
-    for pat in ("src/**/*.py", "tests/**/*.py", "scripts/**/*.py", "yao/**/*.yaml")
+    # README 与设计文档都复述了同一段考据，它们同样会被污染 ——
+    # 审查实测：污染 README 后全套测试照样全绿。
+    for pat in (
+        "src/**/*.py",
+        "tests/**/*.py",
+        "scripts/**/*.py",
+        "yao/**/*.yaml",
+        "*.md",
+        "docs/**/*.md",
+        ".github/**/*.yml",
+        "*.toml",
+    )
     for p in pathlib.Path(__file__).resolve().parents[1].glob(pat)
 )
 
