@@ -1,0 +1,17 @@
+id: gudaili
+name: 孤代理
+tag: 边界切割
+glyphs: [面, "?"]
+out: "面 ?"
+why: >-
+  biang 字 U+30EDD 的 UTF-16 是码元 D883 DEDD。Java/JS/C#/Win32 的
+  length 与 substring 数的都是 UTF-16 码元，所以「取前两个字符」会切在
+  代理对中间，留下孤高位代理 U+D883。Unicode 明令 D800–DFFF 不可编码
+  为 UTF-8，写出去时被换成问号。自指的乐子：这只妖的真身在物理上无法
+  存进任何 UTF-8 文件，妖谱只能记录它的尸体。
+notes:
+  - [現, Java/JS/C#/Win32 的 substring 与 length、MySQL utf8mb3 列、生僻字姓名与 emoji]
+  - [異, 同样以问号收场的 wenhao，成因是字符集装不下；这只是码元切割]
+  - [驅, 按码位或字素切；存储用 utf8mb4；出库前校验没有孤代理]
+repro: gudaili
+expect: "面?"

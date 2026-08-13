@@ -1,0 +1,16 @@
+id: duanhang
+name: 孤句号
+tag: 断行
+glyphs: [。]
+out: 。
+why: >-
+  13 字的句子按 width=12 折，切成两行，第二行只剩一个句号。这违反
+  UAX #14 的 LB30a（表意文字与收尾标点之间不得断行），也就是中文排版
+  的禁则。另一条路同样错：break_long_words=False 时长段落完全不折行
+  直接溢出。两个开关都是错的。
+notes:
+  - [現, 终端输出、邮件正文、PDF 与报表生成、任何拿 textwrap 处理中文的地方]
+  - [異, 换 break_long_words=False 会走向另一个极端：整段不折行直接溢出]
+  - [驅, "用实现 UAX #14 的断行库；最低限度把禁则标点与前一个字绑成不可分割单元"]
+repro: duanhang
+expect: 。

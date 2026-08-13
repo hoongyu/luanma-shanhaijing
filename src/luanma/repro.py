@@ -85,3 +85,29 @@ def mawei():
     names = "".join(chr(c) for c in (0x8D75, 0x94B1, 0x5B59, 0x674E,
                                      0x5468, 0x5434, 0x90D1, 0x738B))
     return "".join(sorted(names))
+
+
+@repro("xingnaoxing")
+def xingnaoxing():
+    """GBK 不自同步：丢一个字节，其后每一对都错位重组，且不抛异常。"""
+    g = "".join(chr(c) for c in (0x4E2D, 0x6587, 0x4E2D, 0x6587)).encode("gbk")
+    return g[1:-1].decode("gbk")
+
+
+@repro("gudaili")
+def gudaili():
+    """按 UTF-16 码元取「前两个字符」，切在代理对中间；孤代理没有 UTF-8 表示。"""
+    text = "".join(chr(c) for c in (0x9762, 0x30EDD, 0x9762))
+    u16 = text.encode("utf-16-le")
+    head = u16[:4].decode("utf-16-le", "surrogatepass")
+    return head.encode("utf-8", "replace").decode("utf-8")
+
+
+@repro("duanhang")
+def duanhang():
+    """textwrap 靠空格找断点；中文没有空格，算法退化成每 width 个码位硬切一刀。"""
+    import textwrap
+    p = "".join(chr(c) for c in (0x4ECA, 0x5929, 0x4E0B, 0x5348, 0x4E09,
+                                 0x70B9, 0x5F00, 0x4F1A, 0x4E0D, 0x8981,
+                                 0x8FDF, 0x5230, 0x3002))
+    return textwrap.wrap(p, width=12)[1]
