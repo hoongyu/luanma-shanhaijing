@@ -62,3 +62,26 @@ def shen():
     """CJK 兼容汉字带单例规范分解，单例分解永不重组，所以连 NFC 都会把它换掉。"""
     import unicodedata
     return unicodedata.normalize("NFC", chr(0xFA19))
+
+
+@repro("quanjiao")
+def quanjiao():
+    """NFKC 是兼容分解：全角拉丁字母带 wide 分解，一律折成半角 ASCII。"""
+    import unicodedata
+    fw = "".join(chr(0xFF21 + i) for i in range(3))
+    return unicodedata.normalize("NFKC", fw)
+
+
+@repro("zhushi")
+def zhushi():
+    """NFKC 不只把串变短，也把串变长：一个码位炸成四个汉字。"""
+    import unicodedata
+    return unicodedata.normalize("NFKC", chr(0x337F))
+
+
+@repro("mawei")
+def mawei():
+    """sorted() 按码位升序；Unicode 基本区大体按康熙部首笔画排，既不是拼音也不是常用度。"""
+    names = "".join(chr(c) for c in (0x8D75, 0x94B1, 0x5B59, 0x674E,
+                                     0x5468, 0x5434, 0x90D1, 0x738B))
+    return "".join(sorted(names))

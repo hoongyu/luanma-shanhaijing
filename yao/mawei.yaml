@@ -1,0 +1,15 @@
+id: mawei
+name: 码位序
+tag: 排序
+glyphs: [吴, 周, 孙, 李, 王, 赵, 郑, 钱]
+out: 吴 周 孙 李 王 赵 郑 钱
+why: >-
+  「赵钱孙李周吴郑王」被 sorted() 排成「吴周孙李王赵郑钱」，在中文
+  读者眼里就是乱序。sorted() 按码位升序，Unicode 基本区大体按康熙
+  部首笔画排，既不是拼音也不是常用度。
+notes:
+  - [現, 任何 sorted 或 ORDER BY 不带中文 collation 的地方：通讯录、名单、下拉框、报表分组]
+  - [異, 同一组姓氏改按 GB2312 字节排，得到的是拼音序——GB2312 的一级汉字本身就按拼音排列，一个 1980 年的编码表至今是标准库里最省事的拼音排序键]
+  - [驅, 用 pypinyin 或 ICU collation（zh-u-co-pinyin）。GB2312 字节序只是应急偏方，只对一级汉字成立]
+repro: mawei
+expect: 吴周孙李王赵郑钱

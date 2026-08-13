@@ -1,0 +1,15 @@
+id: quanjiao
+name: 折半
+tag: 规范化
+glyphs: [A, B, C]
+out: A B C
+why: >-
+  NFKC 是兼容分解，全角拉丁字母带 wide 分解，一律折成半角 ASCII。
+  密码、验证码、口令一旦被中间件 NFKC 过一道，两个肉眼不同的串
+  就撞成一个。
+notes:
+  - [現, 搜索索引、账号与口令规范化、数据库 collation、URL 与标识符规范化]
+  - [異, 折得并不彻底：全角逗号 U+FF0C 折成半角，顿号 U+3001 与句号 U+3002 纹丝不动。它只动 FF00 那一段]
+  - [驅, 想留住全角就别用 NFKC，用 NFC。做等价比较时才 NFKC，且不要把结果写回存储]
+repro: quanjiao
+expect: ABC
