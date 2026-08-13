@@ -259,4 +259,7 @@ Astro 静态站 → Cloudflare Pages
 - **京华老宋体授权原文**（知乎 403）—— 取得前不得使用
 - **马善政缺 7 个山海经生僻字**（赑屃猰貐窫鵸鴼）—— 本项目当前用字 9/9 覆盖，但若妖名用到生僻字会露馅
 - 妖形是否最终走 SVG path 内联（性能与公众号出图更优）还是 webfont —— 两条路都合规，待定
+- **子集产物的内部 name 表仍是原字体名**（`YaoBrush.woff2` 自称 Ma Shan Zheng，`YaoSeal.woff2` 自称 GenRyuMin2 TW R）。改名目前只体现在文件名与将来的 `@font-face` 声明上。
+  **已核实不构成违规**：马善政的 OFL 头部未声明任何 Reserved Font Name；源流明體声明的 RFN 是 `Source`（Adobe 商标），而两个名字都不含它。
+  这是一致性缺口而非法律问题 —— 但若有人把 woff2 单独拿去装进系统，看到的仍是原名。要修的话用 `pyftsubset --name-IDs` 配合改写 name table，属计划外。
 - 是否需要繁体版；公众号与网页是否共用字体

@@ -10,11 +10,18 @@ on:
 jobs:
   verify:
     runs-on: ${{ matrix.os }}
+    # windows-latest 的默认控制台编码是 cp1252，而本项目的断言信息是中文。
+    # 不设这个，测试变红时你读到的会是乱码 —— 一个专治乱码的项目栽在这上面
+    # 未免太蠢。
+    env:
+      PYTHONIOENCODING: utf-8
     strategy:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest]
-        python: ["3.11", "3.13"]
+        # 3.14 是本项目日常开发所用的解释器版本，必须在矩阵里 ——
+        # 全部结论都建立在编解码器行为上，不能让开发机成为唯一未被验证的环境。
+        python: ["3.11", "3.13", "3.14"]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
