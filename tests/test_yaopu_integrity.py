@@ -65,3 +65,11 @@ def test_each_glyph_really_encodes_to_the_bytes_the_yaopu_claims(y):
 @pytest.mark.parametrize("y", YAOS, ids=lambda y: y.id)
 def test_the_out_field_matches_the_glyphs(y):
     assert " ".join(y.glyphs) == y.out
+
+
+def test_no_orphan_repro_functions():
+    """注册了复现函数却没有对应的妖谱条目 —— 多半是删 YAML 时漏了。"""
+    used = {y.repro for y in YAOS}
+    orphans = sorted(set(REGISTRY) - used)
+
+    assert not orphans, f"这些复现函数没有对应的妖谱条目: {orphans}"
