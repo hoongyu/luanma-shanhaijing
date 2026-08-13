@@ -18,3 +18,15 @@ def repro(name):
 def kunjinkao():
     """U+FFFD 的 UTF-8 是 EF BF BD；两枚相连按 GBK 双字节切开 = 锟斤拷。"""
     return ("\ufffd" * 2).encode("utf-8").decode("gbk")
+
+
+@repro("tangtangtang")
+def tangtangtang():
+    """MSVC 调试版把未初始化的栈内存填成 0xCC；CC CC 在 GBK 中是「烫」。"""
+    return (b"\xcc" * 6).decode("gbk")
+
+
+@repro("tuntuntun")
+def tuntuntun():
+    """同上，堆内存填 0xCD；CD CD 是「屯」。见烫知栈，见屯知堆。"""
+    return (b"\xcd" * 6).decode("gbk")

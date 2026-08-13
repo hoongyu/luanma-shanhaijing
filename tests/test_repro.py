@@ -19,3 +19,11 @@ def test_an_odd_number_of_replacement_chars_cannot_form_it():
     import pytest
     with pytest.raises(UnicodeDecodeError):
         ("\ufffd" * 3).encode("utf-8").decode("gbk")
+
+
+def test_stack_fill_0xcc_reads_as_tang():
+    assert REGISTRY["tangtangtang"]() == "烫烫烫"
+
+
+def test_heap_fill_0xcd_reads_as_tun():
+    assert REGISTRY["tuntuntun"]() == "屯屯屯"
