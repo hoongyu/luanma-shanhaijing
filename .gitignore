@@ -14,7 +14,10 @@ prototype/fonts/*.otf
 prototype/fonts/*.zip
 prototype/fonts/sub-*.woff2
 prototype/fonts/ui-*.woff2
-fonts/source/
+# 用 fonts/source/* 而不是 fonts/source/：父目录被整个排除后 git 不会下降进去，
+# 负向规则会失效，占位符只能靠 git add -f 硬塞。写成通配才能让 !.gitkeep 生效。
+fonts/source/*
+!fonts/source/.gitkeep
 public/fonts/
 
 # 授权原文必须进仓库 —— OFL 要求随分发附带

@@ -690,9 +690,20 @@ python -m pytest tests/test_yaopu_integrity.py -v 2>&1 | tail -8
 cd /c/Claude_code/App
 sed -i 's/^expect: 烫烫烫烫$/expect: 烫烫烫/' yao/tangtangtang.yaml
 python -m pytest tests/ -q 2>&1 | tail -4
+python -c "
+import yaml, glob
+for f in sorted(glob.glob('yao/*.yaml')):
+    d = yaml.safe_load(open(f, encoding='utf-8'))
+    print(d['id'], ' '.join(f'U+{ord(c):04X}' for c in d['expect']))
+"
 ```
 
-期望：全部通过
+期望：全部通过，且三条 expect 的码位分别是
+`U+951F U+65A4 U+62F7` / `U+70EB U+70EB U+70EB` / `U+5C6F U+5C6F U+5C6F`
+
+> ⚠️ **不要用 `git diff --stat` 来证明「改回来了」。** 这些 YAML 此刻还未被 `git add`
+> （步骤 6 才提交），未跟踪文件根本不会出现在 `git diff` 里——**改坏了没改回来，
+> 它一样是空输出**。必须用码位复验。这个假证据是实施中被实现代理当场抓出来的。
 
 - [ ] **Step 6: 提交**
 
