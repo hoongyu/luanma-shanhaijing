@@ -1,0 +1,26 @@
+name: 妖谱一致性
+
+on:
+  push:
+  pull_request:
+  schedule:
+    # 每天 UTC 22:17 —— 避开整点，GitHub Actions 在 xx:00 会 drop scheduled event
+    - cron: "17 22 * * *"
+
+jobs:
+  verify:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python: ["3.11", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: 安装
+        run: python -m pip install -e ".[dev]"
+      - name: 跑全谱一致性
+        run: python -m pytest tests/ -v
