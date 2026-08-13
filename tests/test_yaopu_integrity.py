@@ -73,3 +73,25 @@ def test_no_orphan_repro_functions():
     orphans = sorted(set(REGISTRY) - used)
 
     assert not orphans, f"这些复现函数没有对应的妖谱条目: {orphans}"
+
+
+@pytest.mark.parametrize("y", YAOS, ids=lambda y: y.id)
+def test_hex_texture_is_the_byte_unit_that_actually_generates_this_mojibake(y):
+    """hex_texture 不是装饰，是生成该乱码的重复字节单元。
+
+    三条妖谱的语义看似不同（锟斤拷是 U+FFFD 的 UTF-8，烫/屯是内存填充
+    字节），但抽象是同一个：把这个单元重复若干次按 GBK 解，就得到该妖。
+    """
+    unit = bytes.fromhex(y.hex_texture.replace(" ", ""))
+
+    for n in range(1, 13):
+        try:
+            if (unit * n).decode("gbk") == y.expect:
+                return
+        except UnicodeDecodeError:
+            continue
+
+    raise AssertionError(
+        f"{y.id}: 把 {y.hex_texture} 重复 1..12 次按 GBK 解码，"
+        f"没有任何一次得到 {y.expect!r} —— 这个字节单元生成不出这只妖"
+    )
