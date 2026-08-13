@@ -27,7 +27,10 @@ JOBS = [
     ("YaoSeal", "GenRyuMin2TW-R.otf", ui_charset, True),
 ]
 
-VERT_FEATURES = {"vert", "vrt2", "valt", "vpal", "vhal", "halt", "palt"}
+# 只认 vert/vrt2 —— 做竖排标点替换的就是它们。
+# 原先这里还混着 halt/palt，那是横排 feature（竖排对应物是 vhal/vpal），
+# 而断言是「命中任意一个即通过」，于是零个竖排 feature 也能过关。
+VERT_FEATURES = {"vert", "vrt2"}
 
 
 def features_of(path):

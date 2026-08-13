@@ -891,7 +891,10 @@ JOBS = [
     ("YaoSeal", "GenRyuMin2TW-R.otf", ui_charset, True),
 ]
 
-VERT_FEATURES = {"vert", "vrt2", "valt", "vpal", "vhal", "halt", "palt"}
+# 只认 vert/vrt2 —— 做竖排标点替换的就是它们。
+# halt/palt 是横排 feature（竖排对应物是 vhal/vpal），不能作为竖排支持的证据；
+# 加上断言是「命中任意一个即通过」，混进它们会让零个竖排 feature 的产物也过关。
+VERT_FEATURES = {"vert", "vrt2"}
 
 
 def features_of(path):
@@ -953,7 +956,7 @@ cd /c/Claude_code/App && python scripts/build_fonts.py
 ```
   YaoBrush     7 字    ~2.8 KB  -> YaoBrush.woff2
   YaoSeal     46 字    ~10 KB   -> YaoSeal.woff2
-             竖排 feature: halt,palt,vert,vhal,vpal
+             竖排 feature: vert
 字体产物就绪。
 ```
 

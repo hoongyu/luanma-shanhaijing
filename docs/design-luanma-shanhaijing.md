@@ -135,7 +135,7 @@
 | 用途 | 字体 | 授权 | 子集 | 竖排支持 |
 |---|---|---|---|---|
 | **妖形 + 妖名**（横排） | 马善政毛笔楷书 → CSS 名 `YaoBrush` | SIL OFL 1.1（原文已直读） | **2,848 B** / 7 字 | ❌ 无 `vhea`/`vmtx` |
-| **竖排版式** | 源流明體 TW-R → CSS 名 `YaoSeal` | SIL OFL 1.1 | **9,552 B** / 39 字 | ✅ `vert,vhal,vpal,halt,palt` |
+| **竖排版式** | 源流明體 TW-R → CSS 名 `YaoSeal` | SIL OFL 1.1 | **9,552 B** / 39 字 | ✅ `vert,vrt2` |
 | **说明正文** | 系统无衬线栈 | 仅 `font-family` 引用，不分发文件 | 0 B | — |
 
 **整页字体总量 12.4 KB**（原始字体 5.59 MB + 15.5 MB）。
@@ -144,6 +144,7 @@
 
 1. **马善政绝不可用于竖排** —— 实测完全无竖排度量表，句号逗号不会移到右上角
 2. **`pyftsubset` 必须带 `--layout-features="*"`** —— 网上教程常写 `--layout-features=""`，会**静默毁掉竖排标点**
+   - 验证竖排支持只能看 `vert`/`vrt2`（做竖排标点替换的就是它们）。**`halt`/`palt` 是横排 feature，不能作为竖排支持的证据** —— 它们的竖排对应物是 `vhal`/`vpal`，在同一字体里同时存在，把它们算进「竖排 feature」会让零个竖排 feature 的产物也验过
 3. **子集化在 OFL FAQ 2.6 下算 modification，必须改名** —— 故 CSS family 用 `YaoBrush`/`YaoSeal`。原始 OFL 全文归档于 `fonts/LICENSES/`
 
 ### ❌ 已排除（附理由）
