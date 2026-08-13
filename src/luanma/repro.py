@@ -12,3 +12,9 @@ def repro(name):
         REGISTRY[name] = fn
         return fn
     return deco
+
+
+@repro("kunjinkao")
+def kunjinkao():
+    """U+FFFD 的 UTF-8 是 EF BF BD；两枚相连按 GBK 双字节切开 = 锟斤拷。"""
+    return ("\ufffd" * 2).encode("utf-8").decode("gbk")
