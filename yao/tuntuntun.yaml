@@ -2,6 +2,7 @@ id: tuntuntun
 name: 屯屯屯
 tag: 内存填充
 glyphs: [屯, 屯, 屯]
+codec: gbk
 hex_texture: CD CD
 bytes: [CD CD, CD CD, CD CD]
 out: 屯 屯 屯

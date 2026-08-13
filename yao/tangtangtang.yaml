@@ -2,6 +2,7 @@ id: tangtangtang
 name: 燙燙燙
 tag: 内存填充
 glyphs: [烫, 烫, 烫]
+codec: gbk
 hex_texture: CC CC
 bytes: [CC CC, CC CC, CC CC]
 out: 烫 烫 烫

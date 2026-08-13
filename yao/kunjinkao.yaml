@@ -2,6 +2,7 @@ id: kunjinkao
 name: 錕斤拷
 tag: 编码误读
 glyphs: [锟, 斤, 拷]
+codec: gbk
 hex_texture: EF BF BD
 bytes: [EF BF, BD EF, BF BD]
 out: 锟 斤 拷
