@@ -1,0 +1,418 @@
+<meta charset="utf-8">
+<title>乱码山海经 · 视觉验证</title>
+<style>
+__FONTFACE__
+:root{
+  --paper:#EAE3D5;
+  --ink:#171410;
+  --ink-88:rgba(23,20,16,.88);
+  --ink-55:rgba(23,20,16,.55);
+  --ink-30:rgba(23,20,16,.30);
+  --ink-12:rgba(23,20,16,.12);
+  --zhu:#A32D22;
+  --zhu-soft:rgba(163,45,34,.11);
+  /* 字体分工由实测决定：马善政无竖排度量表，只用于横排的妖形与妖名；
+     竖排版式必须走源流明體（vert/vhal/vpal 齐全）。正文只引用系统字体，
+     不分发任何文件 —— 微软 Font FAQ 明确许可这种用法。 */
+  --li:"YaoBrush",serif;                                      /* 妖形 · 马善政 */
+  --song:"YaoSeal",serif;                                     /* 版式 · 源流明體 */
+  --hei:"PingFang SC","Microsoft YaHei","Source Han Sans SC",
+        "Noto Sans SC","Hiragino Sans GB",sans-serif;         /* 说明 */
+  --mono:ui-monospace,"Cascadia Mono",Consolas,monospace;
+  --pop:cubic-bezier(.34,1.56,.64,1);                         /* 带回弹 */
+  --ease:cubic-bezier(.22,.92,.24,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  background:var(--paper); color:var(--ink); font-family:var(--hei);
+  overflow:hidden; -webkit-font-smoothing:antialiased;
+  background-image:
+    radial-gradient(circle at 18% 22%, rgba(0,0,0,.022) 0 1px, transparent 1px),
+    radial-gradient(circle at 66% 71%, rgba(0,0,0,.018) 0 1px, transparent 1px),
+    radial-gradient(ellipse at 50% 38%, rgba(255,252,244,.55), transparent 72%);
+  background-size:6px 6px, 9px 9px, 100% 100%;
+}
+
+#frame{
+  position:absolute; inset:34px; border:1px solid rgba(23,20,16,.22);
+  box-shadow:inset 0 0 0 4px var(--paper), inset 0 0 0 5px var(--ink-12);
+  display:flex; overflow:hidden;
+}
+#center{
+  position:absolute; left:50%; top:0; bottom:0; width:52px; margin-left:-26px;
+  border-left:1px solid var(--ink-12); border-right:1px solid var(--ink-12);
+  display:flex; flex-direction:column; align-items:center; z-index:5; pointer-events:none;
+}
+.yuwei{margin-top:92px}
+#center .bk{
+  writing-mode:vertical-rl; font-family:var(--song); font-size:12px;
+  letter-spacing:.42em; color:var(--ink-55); margin-top:24px;
+}
+#center .num{
+  margin-top:auto; margin-bottom:60px; writing-mode:vertical-rl;
+  font-family:var(--song); font-size:11px; color:var(--ink-30); letter-spacing:.3em;
+}
+
+/* ── 两页 ─────────────────────────────────────────────── */
+.leaf{
+  flex:1; position:relative; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; padding:56px 40px; cursor:pointer;
+  transition:flex .7s var(--ease), opacity .45s ease, padding .7s var(--ease);
+}
+.leaf::before{
+  content:""; position:absolute; inset:44px 30px;
+  background:repeating-linear-gradient(90deg,
+    transparent 0 calc(100% / 6 - 1px), var(--ink-12) calc(100% / 6 - 1px) calc(100% / 6));
+  opacity:.45; pointer-events:none;
+}
+body.open .leaf{opacity:.22}
+body.open .leaf.active{opacity:1; flex:2.6}
+.leaf.active{flex-direction:row; gap:40px; padding:48px 34px}
+
+.plate{
+  display:flex; flex-direction:column; align-items:center; flex:none;
+  transition:transform .7s var(--ease);
+}
+.leaf.active .plate{transform:scale(.72)}
+
+/* ── 妖形：呼吸 / 悬停回弹 / 点击一震 ────────────────── */
+.beast{position:relative; z-index:2; transition:transform .5s var(--pop)}
+.breath{animation:breathe 5.4s ease-in-out infinite}
+@keyframes breathe{
+  0%,100%{transform:translateY(0) rotate(0)}
+  50%    {transform:translateY(-7px) rotate(.7deg)}
+}
+.leaf:hover .beast{transform:translateY(-12px) scale(1.045)}
+.beast svg{display:block; overflow:visible}
+.beast text{font-family:var(--li); fill:var(--ink)}
+
+/* ── 每个字各有脾气：六种互不重复的反应 ────────────────
+   .gl 是动画层，外层 <g> 只管定位，两者互不干扰。      */
+.gl{
+  transform-box:fill-box; transform-origin:center; cursor:pointer;
+  transition:opacity .3s ease;
+}
+.gl:hover{opacity:.62}                       /* 悬停仍有反馈，且不抢戏 */
+
+.gl.play-shen  {animation:shen  .72s cubic-bezier(.3,1.4,.5,1)}
+.gl.play-zhiL  {animation:zhiL  .62s cubic-bezier(.34,1.5,.5,1)}
+.gl.play-zhiR  {animation:zhiR  .46s cubic-bezier(.36,.07,.19,.97)}
+.gl.play-wei   {animation:wei   .95s cubic-bezier(.25,.9,.35,1)}
+.gl.play-guanL {animation:guanL .82s cubic-bezier(.4,.1,.3,1)}
+.gl.play-guanR {animation:guanR .68s cubic-bezier(.28,1.6,.5,1)}
+
+/* 身 · 沉震：重物落地，压扁再弹回 */
+@keyframes shen{
+  0%{transform:scale(1,1)}      22%{transform:scale(1.15,.81)}
+  46%{transform:scale(.93,1.10)} 72%{transform:scale(1.04,.97)}
+  100%{transform:scale(1,1)}
+}
+/* 肢左 · 振翅：向外大幅甩开 */
+@keyframes zhiL{
+  0%{transform:rotate(0) translateX(0)}
+  30%{transform:rotate(-27deg) translateX(-9px)}
+  64%{transform:rotate(10deg) translateX(2px)}
+  100%{transform:rotate(0) translateX(0)}
+}
+/* 肢右 · 急抖：高频小幅，和左边完全两种质感 */
+@keyframes zhiR{
+  0%,100%{transform:translateX(0) rotate(0)}
+  12%{transform:translateX(5px) rotate(4deg)}
+  26%{transform:translateX(-4px) rotate(-3deg)}
+  42%{transform:translateX(3px) rotate(3deg)}
+  58%{transform:translateX(-2px) rotate(-2deg)}
+  76%{transform:translateX(1px) rotate(1deg)}
+}
+/* 尾 · 摆：钟摆衰减 */
+@keyframes wei{
+  0%{transform:rotate(0)}   16%{transform:rotate(14deg)}
+  38%{transform:rotate(-10deg)} 58%{transform:rotate(6deg)}
+  78%{transform:rotate(-3deg)}  92%{transform:rotate(1deg)}
+  100%{transform:rotate(0)}
+}
+/* 冠左 · 旋落：飞起打个整圈再归位 */
+@keyframes guanL{
+  0%{transform:translate(0,0) rotate(0) scale(1)}
+  34%{transform:translate(-17px,-28px) rotate(-165deg) scale(1.22)}
+  70%{transform:translate(4px,7px) rotate(-330deg) scale(.88)}
+  100%{transform:translate(0,0) rotate(-360deg) scale(1)}
+}
+/* 冠右 · 弹跳：只上下，不旋转 */
+@keyframes guanR{
+  0%{transform:translateY(0) scale(1,1)}
+  24%{transform:translateY(-30px) scale(.88,1.16)}
+  52%{transform:translateY(4px) scale(1.14,.86)}
+  76%{transform:translateY(-9px) scale(.96,1.05)}
+  100%{transform:translateY(0) scale(1,1)}
+}
+
+.ming{
+  margin-top:26px; font-family:var(--li); font-size:30px;
+  letter-spacing:.5em; text-indent:.5em; z-index:2;
+  transition:letter-spacing .5s var(--pop);
+}
+.leaf:hover .ming{letter-spacing:.8em}
+.tag{
+  margin-top:12px; font-size:11px; font-weight:500;
+  letter-spacing:.3em; color:var(--ink-55); text-indent:.3em; z-index:2;
+}
+
+/* ── 条目：一个主角 + 三条短注 ───────────────────────── */
+.entry{
+  position:relative; z-index:3; width:0; flex:none;
+  max-height:0; opacity:0; overflow:hidden;
+  transition:max-height .7s var(--ease), width .7s var(--ease), opacity .4s ease .1s;
+}
+.leaf.active .entry{
+  width:min(438px,48%); max-height:74vh; opacity:1;
+  overflow-y:auto; padding-right:10px;
+  scrollbar-width:thin; scrollbar-color:var(--ink-12) transparent;
+}
+.row{
+  opacity:0; transform:translateY(16px);
+  transition:opacity .5s ease, transform .6s var(--pop);
+}
+.leaf.active .row{opacity:1; transform:none}
+
+/* 主角：字节等式 */
+.eq{margin-bottom:22px}
+.eq .bytes{display:flex; flex-wrap:wrap; gap:6px; margin-bottom:11px}
+.eq .b{
+  font-family:var(--mono); font-size:14px; font-weight:600; color:var(--zhu);
+  background:var(--zhu-soft); border:1px solid rgba(163,45,34,.24);
+  padding:4px 8px; border-radius:3px; letter-spacing:.04em;
+  opacity:0; transform:translateY(-10px) scale(.8);
+  transition:opacity .34s ease, transform .46s var(--pop);
+}
+.leaf.active .eq .b{opacity:1; transform:none}
+.eq .arrow{
+  font-size:11px; color:var(--ink-55); letter-spacing:.24em;
+  margin:2px 0 9px; font-weight:500;
+}
+.eq .out{font-family:var(--li); font-size:38px; letter-spacing:.3em}
+
+/* 一句话成因 */
+.why{
+  font-size:14.5px; line-height:1.95; color:var(--ink-88);
+  padding-bottom:20px; margin-bottom:18px; border-bottom:1px solid var(--ink-12);
+}
+.why b{color:var(--zhu); font-weight:600}
+
+/* 三条短注 */
+.notes{display:grid; grid-template-columns:auto 1fr; gap:12px 18px; font-size:13.5px; line-height:1.85}
+.notes dt{
+  font-family:var(--song); color:var(--zhu); font-size:14px;
+  letter-spacing:.16em; white-space:nowrap;
+}
+.notes dd{color:var(--ink-88)}
+
+.code{
+  font-family:var(--mono); font-size:11.5px; line-height:1.8; color:var(--ink-88);
+  background:rgba(23,20,16,.05); border-left:2px solid var(--zhu);
+  padding:9px 12px; margin-top:16px; white-space:pre; overflow-x:auto;
+}
+.stamp{
+  display:inline-block; font-family:var(--song); font-size:10px; color:var(--zhu);
+  border:1px solid var(--zhu); border-radius:2px; padding:1px 5px;
+  letter-spacing:.14em; margin-bottom:7px;
+}
+
+.bleed{
+  position:absolute; border-radius:50%; pointer-events:none; z-index:9;
+  background:radial-gradient(circle, rgba(163,45,34,.26) 0%, rgba(163,45,34,0) 70%);
+  animation:bleed .8s var(--ease) forwards;
+}
+@keyframes bleed{
+  from{width:8px;height:8px;opacity:1;transform:translate(-50%,-50%)}
+  to  {width:360px;height:360px;opacity:0;transform:translate(-50%,-50%)}
+}
+
+#hint{
+  position:absolute; left:0; right:0; bottom:50px; text-align:center;
+  font-family:var(--song); font-size:11px; letter-spacing:.34em;
+  color:var(--ink-30); z-index:6; transition:opacity .4s ease;
+}
+body.open #hint{opacity:0}
+#close{
+  position:absolute; right:54px; top:50px; z-index:8; font-family:var(--song);
+  font-size:11px; letter-spacing:.3em; color:var(--zhu); cursor:pointer;
+  opacity:0; pointer-events:none; transition:opacity .4s ease, transform .4s var(--pop);
+}
+body.open #close{opacity:1; pointer-events:auto}
+#close:hover{transform:scale(1.12)}
+</style>
+
+<div id="frame">
+  <div class="leaf" data-i="0"></div>
+  <div id="center">
+    <div class="yuwei">
+      <svg width="30" height="19" viewBox="0 0 30 19">
+        <path d="M0 0 H30 L15 19 Z" fill="none" stroke="rgba(23,20,16,.28)" stroke-width="1"/>
+        <path d="M4 0 H26 L15 14 Z" fill="rgba(23,20,16,.10)"/>
+      </svg>
+    </div>
+    <div class="bk">亂碼山海經</div>
+    <div class="num">卷 一</div>
+  </div>
+  <div class="leaf" data-i="1"></div>
+</div>
+<div id="hint">點 其 一 · 以 觀 其 詳</div>
+<div id="close">闔 卷</div>
+
+<script>
+const NS='http://www.w3.org/2000/svg';
+
+const YAO=[
+{
+  ming:'錕斤拷', tag:'编码误读',
+  glyphs:['锟','斤','拷'], hex:'EF BF BD',
+  bytes:['EF BF','BD EF','BF BD'], out:'锟 斤 拷', via:'按 GBK 双字节切开',
+  why:'它是<b>伤上加伤</b>。文本先错过一次，坏字被换成 U+FFFD；这个替换字符的 UTF-8 是 EF BF BD。两枚相连共六字节，再被当成 GBK 读，就切出了这三个字。',
+  notes:[['現','UTF-8 文本被当作 GBK 解读'],
+         ['異','必成双——单数枚只剩一个字节，GBK 解码直接失败'],
+         ['驅','全链路统一 UTF-8。已成形则不可逆，原字早已丢失']],
+  code:`>>> ('\\ufffd'*2).encode('utf-8').hex(' ')\n'ef bf bd ef bf bd'\n>>> ('\\ufffd'*2).encode('utf-8').decode('gbk')\n'锟斤拷'`
+},
+{
+  ming:'燙燙燙', tag:'内存填充',
+  glyphs:['烫','烫','烫'], hex:'CC CC',
+  bytes:['CC CC','CC CC','CC CC'], out:'烫 烫 烫', via:'按 GBK 双字节切开',
+  why:'这不是编码错，是<b>你看见了内存本身的颜色</b>。MSVC 调试版把未初始化的栈内存全填成 0xCC，而 CC CC 在 GBK 里恰好是「烫」。',
+  notes:[['現','MSVC 调试模式读到未初始化的栈'],
+         ['異','孪生兄弟叫「屯屯屯」——堆填 0xCD，CD CD 即「屯」'],
+         ['驅','初始化你的变量。修内存，不是修编码']],
+  code:`>>> (b'\\xcc'*6).decode('gbk')\n'烫烫烫'\n>>> (b'\\xcd'*6).decode('gbk')\n'屯屯屯'`
+}];
+
+function beast(y,i){
+  const W=300,H=310;
+  const svg=document.createElementNS(NS,'svg');
+  svg.setAttribute('width',W); svg.setAttribute('height',H);
+  svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
+  const defs=document.createElementNS(NS,'defs');
+  defs.innerHTML=`
+    <pattern id="hx${i}" width="128" height="25" patternUnits="userSpaceOnUse" patternTransform="rotate(-13)">
+      <text x="0" y="14" font-family="ui-monospace,Consolas,monospace"
+            font-size="11" fill="rgba(23,20,16,.14)" letter-spacing="2">${y.hex}</text>
+    </pattern>
+    <radialGradient id="gl${i}" cx="50%" cy="45%" r="52%">
+      <stop offset="0%" stop-color="rgba(163,45,34,.11)"/>
+      <stop offset="100%" stop-color="rgba(163,45,34,0)"/>
+    </radialGradient>
+    <filter id="ik${i}" x="-12%" y="-12%" width="124%" height="124%">
+      <feTurbulence type="fractalNoise" baseFrequency="1.1" numOctaves="2" seed="${i*11+5}" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="1.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>`;
+  svg.appendChild(defs);
+  const halo=document.createElementNS(NS,'circle');
+  halo.setAttribute('cx',W/2); halo.setAttribute('cy',H*.45);
+  halo.setAttribute('r',134); halo.setAttribute('fill',`url(#gl${i})`);
+  svg.appendChild(halo);
+
+  /* 定位交给外层 <g>，动画交给内层 .gl —— 两层分开，
+     变换才不会互相覆盖。皮（十六进制底纹）和肉放进同一个
+     .gl 里，字一动底纹跟着动，不会分家。 */
+  const part=(ch,x,yy,sz,op,rot,flip,role,skin)=>{
+    const pos=document.createElementNS(NS,'g');
+    pos.setAttribute('transform',
+      `translate(${x} ${yy}) rotate(${rot||0}) scale(${flip?-1:1} 1)`);
+    const anim=document.createElementNS(NS,'g');
+    anim.setAttribute('class','gl');
+    anim.dataset.role=role;
+
+    const mk=fill=>{
+      const t=document.createElementNS(NS,'text');
+      t.setAttribute('font-size',sz); t.setAttribute('text-anchor','middle');
+      t.setAttribute('dominant-baseline','central');
+      t.setAttribute('opacity',fill?1:op);
+      if(fill) t.setAttribute('fill',fill);
+      t.textContent=ch; return t;
+    };
+    anim.appendChild(mk());
+    if(skin) anim.appendChild(mk(`url(#hx${i})`));
+    pos.appendChild(anim);
+    return pos;
+  };
+
+  const g=document.createElementNS(NS,'g');
+  g.setAttribute('filter',`url(#ik${i})`);
+  const [a,b,c]=y.glyphs;
+  g.appendChild(part(a,W/2,   H*.40,132,.93, 0,   false,'shen', true ));  // 身
+  g.appendChild(part(b,W/2-84,H*.62, 66,.60,-17,  false,'zhiL', false));  // 肢左
+  g.appendChild(part(b,W/2+84,H*.62, 66,.60, 17,  true ,'zhiR', false));  // 肢右
+  g.appendChild(part(c,W/2,   H*.79, 84,.74, 0,   false,'wei',  true ));  // 尾
+  g.appendChild(part(a,W/2-46,H*.14, 34,.28,-24,  false,'guanL',false));  // 冠左
+  g.appendChild(part(a,W/2+46,H*.14, 34,.28, 24,  true ,'guanR',false));  // 冠右
+  svg.appendChild(g);
+  return svg;
+}
+
+document.querySelectorAll('.leaf').forEach(leaf=>{
+  const i=+leaf.dataset.i, y=YAO[i];
+
+  const bw=document.createElement('div'); bw.className='beast';
+  const br=document.createElement('div'); br.className='breath';
+  br.appendChild(beast(y,i)); bw.appendChild(br);
+
+  const ming=document.createElement('div'); ming.className='ming'; ming.textContent=y.ming;
+  const tag=document.createElement('div');  tag.className='tag';  tag.textContent=y.tag;
+
+  const entry=document.createElement('div'); entry.className='entry';
+  entry.innerHTML=`
+    <div class="row eq" style="transition-delay:.06s">
+      <div class="bytes">${y.bytes.map((b,k)=>
+        `<span class="b" style="transition-delay:${.16+k*.09}s">${b}</span>`).join('')}</div>
+      <div class="arrow">↓ ${y.via}</div>
+      <div class="out">${y.out}</div>
+    </div>
+    <div class="row why" style="transition-delay:.2s">${y.why}</div>
+    <dl class="notes">${y.notes.map(([k,v],n)=>
+      `<dt class="row" style="transition-delay:${.3+n*.07}s">${k}</dt>
+       <dd class="row" style="transition-delay:${.3+n*.07}s">${v}</dd>`).join('')}</dl>
+    <div class="row" style="transition-delay:.56s">
+      <div class="code"><span class="stamp">已覆核</span>\n${y.code}</div>
+    </div>`;
+
+  const plate=document.createElement('div'); plate.className='plate';
+  plate.append(bw,ming,tag);
+  leaf.append(plate,entry);
+
+  const inkDrop=e=>{
+    const r=document.createElement('div'); r.className='bleed';
+    const box=leaf.getBoundingClientRect();
+    r.style.left=(e.clientX-box.left)+'px'; r.style.top=(e.clientY-box.top)+'px';
+    leaf.appendChild(r); setTimeout(()=>r.remove(),840);
+  };
+  const openLeaf=()=>{
+    document.querySelectorAll('.leaf').forEach(l=>l.classList.remove('active'));
+    leaf.classList.add('active'); document.body.classList.add('open');
+  };
+
+  /* 每个字点自己的动作。展开之后再点只播动画，不会把页合上 ——
+     妖是可以反复戳的，翻页是另一回事。 */
+  bw.querySelectorAll('.gl').forEach(gl=>{
+    const cls='play-'+gl.dataset.role;
+    gl.addEventListener('click',e=>{
+      e.stopPropagation();
+      gl.classList.remove(cls); void gl.getBoundingClientRect(); gl.classList.add(cls);
+      if(!leaf.classList.contains('active')){ inkDrop(e); openLeaf(); }
+    });
+    gl.addEventListener('animationend',()=>gl.classList.remove(cls));
+  });
+
+  leaf.addEventListener('click',e=>{
+    inkDrop(e);
+    const was=leaf.classList.contains('active');
+    document.querySelectorAll('.leaf').forEach(l=>l.classList.remove('active'));
+    if(was){document.body.classList.remove('open'); return;}
+    leaf.classList.add('active'); document.body.classList.add('open');
+  });
+});
+
+document.getElementById('close').addEventListener('click',()=>{
+  document.body.classList.remove('open');
+  document.querySelectorAll('.leaf').forEach(l=>l.classList.remove('active'));
+});
+addEventListener('keydown',e=>{if(e.key==='Escape')document.getElementById('close').click();});
+</script>

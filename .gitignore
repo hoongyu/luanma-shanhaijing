@@ -1,0 +1,21 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+build/
+dist/
+node_modules/
+.env
+
+# 字体原件不进仓库：体积大且可从上游重新下载。
+# 子集化产物由构建脚本生成，也不进仓库。
+prototype/fonts/*.ttf
+prototype/fonts/*.otf
+prototype/fonts/*.zip
+prototype/fonts/sub-*.woff2
+prototype/fonts/ui-*.woff2
+fonts/source/
+public/fonts/
+
+# 授权原文必须进仓库 —— OFL 要求随分发附带
+!fonts/LICENSES/

@@ -1,0 +1,54 @@
+[
+ {
+  "font": "GenRyuMin2TW-B",
+  "have": 9,
+  "total": 9,
+  "missing": [],
+  "bytes": 3396
+ },
+ {
+  "font": "GenRyuMin2TW-H",
+  "have": 9,
+  "total": 9,
+  "missing": [],
+  "bytes": 3400
+ },
+ {
+  "font": "GenRyuMin2TW-R",
+  "have": 9,
+  "total": 9,
+  "missing": [],
+  "bytes": 3396
+ },
+ {
+  "font": "LXGWSeal-Regular",
+  "have": 0,
+  "total": 9,
+  "missing": [
+   "锟(U+951F)",
+   "斤(U+65A4)",
+   "拷(U+62F7)",
+   "烫(U+70EB)",
+   "屯(U+5C6F)",
+   "口(U+53E3)",
+   "豆(U+8C46)",
+   "腐(U+8150)",
+   "锘(U+9518)"
+  ],
+  "bytes": 672
+ },
+ {
+  "font": "LXGWWenKai-Regular",
+  "have": 9,
+  "total": 9,
+  "missing": [],
+  "bytes": 3272
+ },
+ {
+  "font": "MaShanZheng-Regular",
+  "have": 9,
+  "total": 9,
+  "missing": [],
+  "bytes": 4684
+ }
+]
