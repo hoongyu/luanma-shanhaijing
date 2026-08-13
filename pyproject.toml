@@ -17,4 +17,6 @@ where = ["src"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-addopts = "-q"
+# 不要用 -q：命令行再加一个 -q 会变成 -qq，pytest 会吞掉结尾的
+# 「N passed」汇总行，跑测试的人就看不见测试数了。
+addopts = "-ra"

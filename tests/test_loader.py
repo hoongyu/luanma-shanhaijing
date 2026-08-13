@@ -1,4 +1,4 @@
-from luanma.loader import load_all
+from luanma.loader import YAO_DIR, load_all
 
 
 def test_loads_every_yaml_in_the_yao_directory():
@@ -13,12 +13,6 @@ def test_entries_come_back_as_validated_objects():
 
     assert kjk.name == "錕斤拷"
     assert kjk.expect == "锟斤拷"
-
-
-import pytest
-
-from luanma.loader import YAO_DIR, load_all
-from luanma.schema import SchemaError
 
 
 def test_ids_are_unique_across_the_yaopu():
