@@ -148,7 +148,9 @@
 1. **马善政绝不可用于竖排** —— 实测完全无竖排度量表，句号逗号不会移到右上角
 2. **`pyftsubset` 必须带 `--layout-features="*"`** —— 网上教程常写 `--layout-features=""`，会**静默毁掉竖排标点**
    - 验证竖排支持只能看 `vert`/`vrt2`（做竖排标点替换的就是它们）。**`halt`/`palt` 是横排 feature，不能作为竖排支持的证据** —— 它们的竖排对应物是 `vhal`/`vpal`，在同一字体里同时存在，把它们算进「竖排 feature」会让零个竖排 feature 的产物也验过
-3. **子集化在 OFL FAQ 2.6 下算 modification，必须改名** —— 故 CSS family 用 `YaoBrush`/`YaoSeal`。原始 OFL 全文归档于 `fonts/LICENSES/`
+3. **子集化在 OFL FAQ 2.6 下算 modification，默认必须改名** —— 故 CSS family 用 `YaoBrush`/`YaoSeal`。原始 OFL 全文归档于 `fonts/LICENSES/`
+   - ⚠️ **这条不是普适的**：霞鹜文楷的 OFL 带一条 ADDITIONAL PERMISSION，明文允许「仅为 webfont 交付而子集化或转 WOFF/WOFF2」时**继续沿用**保留字体名（条件是不作为可安装的桌面字体分发）。所以采用新字体时要读它自己的授权原文，不要照搬本条。
+   - 义务边界：**授权义务附着于分发，不附着于用途。** `prototype/` 只是设计验证，但它被 git 跟踪且内嵌了霞鹜文楷子集，OFL 第 2 条照样要求随附全文 —— 故 `fonts/LICENSES/` 里有三份而非两份。
 
 ### ❌ 已排除（附理由）
 
