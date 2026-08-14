@@ -4,9 +4,11 @@
   马善政毛笔楷书  https://github.com/google/fonts/raw/main/ofl/mashanzheng/MaShanZheng-Regular.ttf
   源流明體 TW-R   https://github.com/ButTaiwan/genryu-font/releases  (GenRyuMin2TW-otf.zip)
 
-两条不能违反的规则：
+三条不能违反的规则：
   1. --layout-features="*"  —— 写成 "" 会静默毁掉竖排标点
   2. CSS family 必须改名 —— 子集化在 OFL FAQ 2.6 下算 modification
+  3. 请求的字必须全在产物 cmap 里 —— 原件缺字时 pyftsubset 既不报错
+     也不警告，退出码照样是 0，只有最终页面上会出现方框
 """
 
 import pathlib
@@ -42,6 +44,20 @@ def features_of(path):
     return found
 
 
+def codepoints_of(path):
+    ft = TTFont(path)
+    found = set()
+    for t in ft["cmap"].tables:
+        found |= set(t.cmap)
+    return found
+
+
+def missing_from(path, text):
+    """请求了但产物里没有的字。原件 cmap 缺字就会落到这里。"""
+    covered = codepoints_of(path)
+    return [ch for ch in text if ord(ch) not in covered]
+
+
 def main():
     OUT.mkdir(parents=True, exist_ok=True)
     failures = []
@@ -59,6 +75,19 @@ def main():
         size = outp.stat().st_size
         feats = features_of(outp)
         print(f"  {family:<10} {len(text):>3} 字  {size:>6} B  -> {outp.name}")
+
+        # 码位而不是字符 —— 终端多半是 GBK，直接打这些字只会打出乱码。
+        missing = missing_from(outp, text)
+        if missing:
+            failures.append(
+                f"{family} 缺 {len(missing)}/{len(text)} 字: "
+                + " ".join(f"U+{ord(ch):04X}" for ch in missing)
+                + f" —— 原件 {src} 的 cmap 里没有这些字，"
+                f"pyftsubset 对缺字不报错也不警告。"
+                f"换原件，或把这些字挪到有它们的那个 family"
+            )
+        else:
+            print(f"             覆盖: {len(text)}/{len(text)} 字，零缺失")
 
         if needs_vertical:
             got = feats & VERT_FEATURES
