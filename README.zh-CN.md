@@ -70,3 +70,7 @@ python scripts/build_fonts.py
 | 说明正文 | 系统无衬线（仅 font-family 引用，不分发文件） | — |
 
 **马善政没有竖排度量表**，因此严格限定于横排用途。
+
+## 许可证
+
+代码采用 [Apache License 2.0](LICENSE)。字体沿用各自的 SIL OFL 1.1 许可证，见上面「字体授权」和 `fonts/LICENSES/`。

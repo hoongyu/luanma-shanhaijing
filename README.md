@@ -68,3 +68,7 @@ All fonts used here are licensed under SIL OFL 1.1; the licence texts are archiv
 | Body text | system sans-serif (referenced by font-family only, no files distributed) | — |
 
 **Ma Shan Zheng has no vertical metrics table**, so it is used strictly for horizontal text.
+
+## License
+
+The code is licensed under the [Apache License 2.0](LICENSE). The fonts keep their own licence, SIL OFL 1.1 (see "Font licences" above and `fonts/LICENSES/`).
